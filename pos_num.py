@@ -7,11 +7,10 @@ Created on Wed Jan 22 08:57:38 2020
 #from emailautosend import mailthis
 #from emailautosend import getemail
 import os
-import xlwings as xw
-from xlwings import constants
 import pandas as pd
 import re
 import win32com.client as win32
+from cleansheet import *
 
 def newest(path,fname):
     files = os.listdir(path)
@@ -37,25 +36,9 @@ status_report = df[(df['vacant_/_filled']=='Vacant')&(df['position_status']=='A'
    'position_effective_date','position_active_/_inactive','position_status',
    'position_full/part','reports_to_name','reports_to','pay_serv_position','budget_line_#']]
 nfname = 'S:\\Downloads\\vacant_positions.xlsx'
-status_report.to_excel(nfname)
-wb = xw.Book(nfname) 
-active_window = wb.app.api.ActiveWindow
-active_window.FreezePanes = False
-active_window.SplitColumn = 0
-active_window.SplitRow = 1
-active_window.FreezePanes = True
-wb.sheets['Sheet1'].autofit()
-try:
-    xw.Range("A:A").api.Delete(constants.DeleteShiftDirection.xlShiftUp)
-except:
-    print("Didn't work this time boss")
-    pass
 
-def xl_col_sort(sheet,col_num):
-    sheet.range('A2:X99999').api.Sort(Key1=sheet.range((2,col_num)).api, Order1=1)
-xl_col_sort(wb.sheets['Sheet1'],2)
-wb.save()
-wb.close()
+
+cleansheet(status_report,nfname)
 
 hrisgroup = "'lolsson@york.cuny.edu';'pcaceres901@york.cuny.edu';'ajackson1@york.cuny.edu';'mwilliams@york.cuny.edu';'lwilkinson901@york.cuny.edu'"
 
@@ -103,4 +86,4 @@ def reportmail():
     mail.Body = text
     mail.HTMLBody = html
     mail.Send()
-reportmail()
+#reportmail()
