@@ -1,4 +1,1 @@
 pandas==0.24.0
-pywin32==228
-tabulate==0.8.7
-xlwings==0.20.7
